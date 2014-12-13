@@ -10,13 +10,13 @@ app.use(express.static('public'));
 // REDIS Conection
 var redis = require("redis");
 if (process.env.REDISTOGO_URL) {
-    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-    var redisClient = redis.createClient(rtg.port, rtg.hostname);
-    redisClient.auth(rtg.auth.split(":")[1]);
+  var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+  var redisClient = redis.createClient(rtg.port, rtg.hostname);
+  redisClient.auth(rtg.auth.split(":")[1]);
 } else {
-    var redisClient = require("redis").createClient();
+  var redisClient = require("redis").createClient();
+  redisClient.select((process.env.NODE_ENV || 'development').length);
 }
-redisClient.select((process.env.NODE_ENV || 'development').length);
 
 app.get('/cities', function(req, res){
   redisClient.hkeys('cities', function(err, names){
