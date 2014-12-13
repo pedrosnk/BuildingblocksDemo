@@ -33,4 +33,13 @@ app.post('/cities', urlencoded, function(req, res){
   });
 });
 
+app.delete('/cities/:name', function(req, res){
+  redisClient.hdel('cities', req.params.name, function(err){
+    if (err){
+      throw err;
+    }
+    res.sendStatus(204);
+  });
+});
+
 module.exports = app;
